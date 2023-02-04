@@ -39,7 +39,8 @@ stages:
       inputs:
         targetType: inline
         script: |
-          az acr login --name $(acrName) --password "$(System.AccessToken)"
+          # Log in to the Azure CLI using the System.AccessToken
+          echo $(System.AccessToken) | az login --service-principal -u http://$(acrName) --tenant $(System.TenantId)
           
           # List all images in the ACR starting with "apim"
           images=($(az acr repository list-images --repository $(acrName) --output tsv --query "[?starts_with(name,'apim')].name"))
@@ -70,4 +71,3 @@ stages:
       inputs:
         artifactName: images
         pathToPublish: images.txt
-
