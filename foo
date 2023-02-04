@@ -1,7 +1,3 @@
-az acr repository list -n ABCDEFG --query "[].{name: name}" -o json | jq -r '.[] | select(.name | startswith("foo")) | .name'
-
-
-
 # YAML pipeline for Azure DevOps
 
 # Start with a clean slate
@@ -26,16 +22,15 @@ stages:
           # Log in to the ACR
           az acr login --name <acr_name>
           
-          # List all images in the ACR
-          images=($(az acr repository list-images --repository <repo_name> --output tsv --query "[].name"))
+          # List all images in the ACR starting with "ALPHA"
+          images=($(az acr repository list-images --repository <repo_name> --output tsv --query "[?starts_with(name,'ALPHA')].name"))
           
           # Get the last three images deployed to the AKS cluster
-          deployed_images=($(az log analytics query --workspace <log_analytics_workspace> --query "KubernetesEvents 
-          | where namespace_name == '<namespace>' and event_type == 'Normal' and message startswith 'Successfully pulled image'
-          | project image_name=extract_all(message, '(?<=image=).*')
-          | order by TimeGenerated desc
+          deployed_images=($(az log analytics query --workspace <log_analytics_workspace> --query "ContainerInventory 
+          | where Image startswith 'foo/' 
+          | distinct Image, ImageTag 
           | take 3
-          | project image_name"))
+          | project Image"))
           
           # Filter out the last three deployed images from the list of all images
           filtered_images=()
@@ -48,5 +43,5 @@ stages:
           done
           
           # Print the filtered list of images
-          echo "Images in ACR excluding the last three deployed to AKS:"
+          echo "Images in ACR starting with 'ALPHA' and excluding the last three deployed to AKS:"
           printf '%s\n' "${filtered_images[@]}"
