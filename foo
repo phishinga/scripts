@@ -1,28 +1,33 @@
-# YAML pipeline for Azure DevOps
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/main/service-schema.json
 
-# Define the pipeline parameters
 parameters:
-  - name: acr_name
-    displayName: ACR Name
+  - name: 'acrName'
+    displayName: Azure Container Registry Name
     type: string
-    default: myacr
-  - name: repo_name
-    displayName: Repository Name
+    default: 'c1pltdevappcr'
+  - name: logAnalyticsWorkspaceID
+    displayName: Log Analytics workspace ID
     type: string
-    default: myrepo
-  - name: log_analytics_workspace
-    displayName: Log Analytics Workspace
+    default: 'ab0c6b91-dc0b-4e0b-ae69-06393a600ccd'
+  - name: akssub
+    displayName: AKS Subscription ID
     type: string
-    default: mylogworkspace
+    default: 'PLT-DEV-APP-SC'
 
-# Start with a clean slate
+# Start with clean state
 resources:
   containers:
   - container: acr
     image: mcr.microsoft.com/azure-cli
 
+name: 0.1.$(Rev:r)
+
+pool: Plum-PRD-OPS-bap-vmss
+
+trigger: none
+
 stages:
-- stage: List Images
+- stage: ListImages
   displayName: List Images in ACR
   jobs:
   - job: ListImages
@@ -34,15 +39,14 @@ stages:
       inputs:
         targetType: inline
         script: |
-          # Log in to the ACR using the System.AccessToken
-          az login --service-principal --username http://$(acr_name) --password $(System.AccessToken)
+          az acr login --name $(acrName) --password "$(System.AccessToken)"
           
-          # List all images in the ACR starting with "ALPHA"
-          images=($(az acr repository list-images --repository $(repo_name) --output tsv --query "[?starts_with(name,'ALPHA')].name"))
+          # List all images in the ACR starting with "apim"
+          images=($(az acr repository list-images --repository $(acrName) --output tsv --query "[?starts_with(name,'apim')].name"))
           
           # Get the last three images deployed to the AKS cluster
-          deployed_images=($(az log analytics query --workspace $(log_analytics_workspace) --query "ContainerInventory 
-          | where Image startswith 'foo/' 
+          deployed_images=($(az log analytics query --workspace $(logAnalyticsWorkspaceID) --query "ContainerInventory 
+          | where Image startswith 'apim/' 
           | distinct Image, ImageTag 
           | take 3
           | project Image"))
@@ -58,5 +62,12 @@ stages:
           done
           
           # Print the filtered list of images
-          echo "Images in ACR starting with 'ALPHA' and excluding the last three deployed to AKS:"
+          echo "Images in ACR starting with 'apim' and excluding the last three deployed to AKS in $(akssub):"
           printf '%s\n' "${filtered_images[@]}"
+
+    - task: PublishBuildArtifacts@1
+      displayName: Publish Build Artifacts
+      inputs:
+        artifactName: images
+        pathToPublish: images.txt
+
