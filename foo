@@ -1,1 +1,52 @@
 az acr repository list -n ABCDEFG --query "[].{name: name}" -o json | jq -r '.[] | select(.name | startswith("foo")) | .name'
+
+
+
+# YAML pipeline for Azure DevOps
+
+# Start with a clean slate
+resources:
+  containers:
+  - container: acr
+    image: mcr.microsoft.com/azure-cli
+
+stages:
+- stage: List Images
+  displayName: List Images in ACR
+  jobs:
+  - job: ListImages
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Bash@3
+      displayName: List Images in ACR
+      inputs:
+        targetType: inline
+        script: |
+          # Log in to the ACR
+          az acr login --name <acr_name>
+          
+          # List all images in the ACR
+          images=($(az acr repository list-images --repository <repo_name> --output tsv --query "[].name"))
+          
+          # Get the last three images deployed to the AKS cluster
+          deployed_images=($(az log analytics query --workspace <log_analytics_workspace> --query "KubernetesEvents 
+          | where namespace_name == '<namespace>' and event_type == 'Normal' and message startswith 'Successfully pulled image'
+          | project image_name=extract_all(message, '(?<=image=).*')
+          | order by TimeGenerated desc
+          | take 3
+          | project image_name"))
+          
+          # Filter out the last three deployed images from the list of all images
+          filtered_images=()
+          for image in "${images[@]}"; do
+            skip=
+            for deployed_image in "${deployed_images[@]}"; do
+              [[ $image == $deployed_image ]] && { skip=1; break; }
+            done
+            [[ -n $skip ]] || filtered_images+=("$image")
+          done
+          
+          # Print the filtered list of images
+          echo "Images in ACR excluding the last three deployed to AKS:"
+          printf '%s\n' "${filtered_images[@]}"
