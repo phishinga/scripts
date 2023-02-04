@@ -1,0 +1,1 @@
+az acr repository list -n ABCDEFG --query "[].{name: name}" -o json | jq -r '.[] | select(.name | startswith("foo")) | .name'
