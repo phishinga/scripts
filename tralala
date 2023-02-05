@@ -1,0 +1,27 @@
+trigger: none
+
+stages:
+  - stage: Delete stale DEV Images from DEV ACR
+    jobs:
+      - deployment: downloadBuildArtifact
+        displayName: downloadBuildArtifact
+        environment: dev-test-roman
+        strategy: 
+          runOnce:
+           deploy:
+              steps:
+                - task: DownloadBuildArtifacts@1
+                  displayName: downloadBuildArtifact
+                    inputs:
+                    buildType: 'specific'
+                    project: '967e214d-62e9-45f0-b84b-75dedabc546b'
+                    pipeline: '2546'
+                    buildVersionToDownload: 'latest'
+                    downloadType: 'specific'
+                    downloadPath: '$(System.ArtifactsDirectory)'
+
+                - task: PowerShell@2
+                    displayName: executeRemovalScript
+                    inputs:
+                    filePath: '$(System.DefaultWorkingDirectory)/DEVACRStaleImagesForRemoval.ps1'
+                    arguments: 'powershell -ExecutionPolicy Bypass -File DEVACRStaleImagesForRemoval.ps1'
