@@ -96,7 +96,7 @@ done
 #
 # On the other hand, /etc/init.d is a directory where the SysVinit system stores scripts to control the services. 
 # The scripts are typically shell scripts that are executed during boot or shutdown, and can be used to start, stop, 
-# restart, or check the status of a service.
+# restart, or check the status of a service. 
 #
 # The way services are managed with systemctl is different from the way they are managed with /etc/init.d. systemctl 
 # is more modern and provides better control and management of services. It is also more efficient and can start services 
