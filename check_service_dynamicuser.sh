@@ -4,8 +4,8 @@ echo ""
 echo "###############   PHISHINGA.COM  ###################"
 echo "#                                                  #"
 echo "#  Script that check if all running services       #"
-echo "#  in a systemd system are configured              #"
-echo "#  to use DynamicUser                              #" 
+echo "#  in a systemd system or SysVinit system          #"
+echo "#  are configured to use DynamicUser               #" 
 echo "#                                                  #"
 echo "####################################################"
 echo ""
@@ -52,7 +52,12 @@ echo -e ${blue}"LETS START ...${clear}"
 echo ""
 sleep 3
 
-# Loop through all running services
+echo ""
+echo -e ${blue}"Loop through all running services (if you have systemctl installed)${clear}"
+echo ""
+sleep 3
+
+# Loop through all running services (if you have systemctl installed)
 for service in $(systemctl list-units --type=service --state=running --no-legend | awk '{print $1}')
 do
   # Check if the service is configured to use DynamicUser
@@ -62,3 +67,39 @@ do
     echo "${service} is NOT configured to use DynamicUser"
   fi
 done
+
+echo ""
+echo -e ${blue}"Loop through all running services in /etc/init.d/*(when systemctl is not installed)${clear}"
+echo ""
+
+# Loop through all running services (when systemctl is not installed)
+
+for service in /etc/init.d/*
+do
+  if [[ -x $service && -f $service ]]; then
+    if grep -q '^DynamicUser=.*' "$service"; then
+      echo -e ${green}"${service} IS CONFIGURED to use DynamicUser"${clear}
+    else
+      echo "$service is NOT configured to use DynamicUser"
+    fi
+  fi
+done
+
+#
+# What is happening here?
+#
+# The main difference between the results from systemctl and /etc/init.d is the way in which they manage services.
+#
+# systemctl is a tool used to control the systemd system and service manager. It is used to manage services in a 
+# modern system that uses systemd. Systemd is a system and service manager for Linux, which replaces the traditional 
+# System V init (SysVinit) system.
+#
+# On the other hand, /etc/init.d is a directory where the SysVinit system stores scripts to control the services. 
+# The scripts are typically shell scripts that are executed during boot or shutdown, and can be used to start, stop, 
+# restart, or check the status of a service.
+#
+# The way services are managed with systemctl is different from the way they are managed with /etc/init.d. systemctl 
+# is more modern and provides better control and management of services. It is also more efficient and can start services 
+# in parallel, which can help reduce system boot time. In contrast, /etc/init.d is older and has limitations in terms of 
+# service management and control.
+#
