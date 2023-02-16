@@ -27,6 +27,7 @@ create a new user account for the service at runtime.
 "
 
 user=$(whoami)
+initSystem=$(ps -p 1 -o comm=)
 
 # Color variables
 red='\033[0;31m'
@@ -51,6 +52,10 @@ echo ""
 echo -e ${blue}"LETS START ...${clear}"
 echo ""
 sleep 3
+
+echo "What is your init system on the host operating system?"  
+echo "$initSystem" 
+echo ""
 
 echo ""
 echo -e ${blue}"Loop through all running services (if you have systemctl installed)${clear}"

@@ -24,10 +24,10 @@ clear='\033[0m'
 
 
 # Check if running as root
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
-  exit
-fi
+#if [ "$EUID" -ne 0 ]
+#  then echo "Please run as root"
+#  exit
+#fi
 
 # Check if systemctl is installed
 if [ ! -x "$(command -v systemctl)" ]; then
