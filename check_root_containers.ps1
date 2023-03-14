@@ -20,3 +20,19 @@ foreach ($ns in $namespaces) {
         }
     }
 }
+
+
+
+# Read the list from the file
+$list = Get-Content -Path "path/to/list.txt"
+
+# Loop through each line in the list
+foreach ($line in $list) {
+    # Split the line into separate variables
+    $namespace = ($line -split ",")[0].Split(":")[1]
+    $pod = ($line -split ",")[1].Split(":")[1]
+    $container = ($line -split ",")[2].Split(":")[1]
+
+    # Execute the command
+    kubectl exec -n $namespace $pod -c $container -- sh -c "id"
+}
