@@ -9,7 +9,7 @@ foreach ($item in $json_output.items) {
     foreach ($container in $item.spec.containers) {
         $container_name = $container.name
         $runAsUser = $container.securityContext.runAsUser
-        $runningAsRoot = $null -eq $runAsUser -or $runAsUser -eq 0
+        $runningAsRoot = $runAsUser -eq 0
         
         Write-Host "Namespace: $ns - Pod: $pod_name - Container: $container_name - Running as root: $runningAsRoot"
     }
