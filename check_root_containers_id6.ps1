@@ -1,17 +1,17 @@
-$json_output = kubectl get pods --all-namespaces -o json | ConvertFrom-Json | Where-Object { $_.status.phase -eq "Running" }
+$json_output = kubectl get pods --all-namespaces -o json | ConvertFrom-Json
 
-Write-Host "Found $($json_output.items.Count) running pods."
+Write-Host "Found $($json_output.items.Count) pods."
 
-foreach ($item in $json_output.items) {
-    $ns = $item.metadata.namespace
-    $pod_name = $item.metadata.name
+$json_output.items | ForEach-Object {
+    $ns = $_.metadata.namespace
+    $pod_name = $_.metadata.name
 
-    foreach ($container in $item.spec.containers) {
+    foreach ($container in $_.spec.containers) {
         $container_name = $container.name
         $uid = $null
 
         # Check if the container is running before executing commands
-        $container_status = (kubectl get pod $pod_name -n $ns -o jsonpath="{.status.containerStatuses[?(@.name=='$container_name')].state.running}")
+        $container_status = $_.status.containerStatuses | Where-Object { $_.name -eq $container_name } | Select-Object -ExpandProperty state | Where-Object { $_.running } | Select-Object -First 1
 
         if ($container_status) {
             # Try executing the 'id' command for Linux containers
