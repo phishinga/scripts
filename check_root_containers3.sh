@@ -1,5 +1,19 @@
 #!/bin/bash
 
+echo ""
+echo ""
+echo "###############   PHISHINGA.COM  ###################"
+echo "#                                                  #"
+echo "#  Script that checks if K8S containers            #" 
+echo "#  are running under root                          #"
+echo "#  Uses kubectl                                    #"
+echo "#                                                  #"
+echo "####################################################"
+echo ""
+
+echo "Motivation:
+Running Kubernetes containers as root can lead to security vulnerabilities and malicious attacks, as well as unintended changes to the host system. It's best to avoid running containers as root and use a non-root user with minimal privileges instead.
+
 # Get JSON output for all the pods
 json_output=$(kubectl get pods --all-namespaces -o json)
 
