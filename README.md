@@ -10,3 +10,6 @@ Various scripts to check: root containers, dynamic users, writable path variable
 - Script that checks if Linux Privilege Escalation using PATH Variable manipulation is possible. 
 - ```curl https://raw.githubusercontent.com/phishinga/scripts/main/check_path_variables.sh | bash```
 
+### [check_root_containers.sh](https://github.com/phishinga/scripts/blob/main/check_root_containers.sh)
+- Script that checks if K8S containers are running under root privileges. Uses kubectl.
+- ```curl https://raw.githubusercontent.com/phishinga/scripts/main/check_root_containers.sh | bash```
