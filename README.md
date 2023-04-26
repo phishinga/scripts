@@ -19,6 +19,6 @@ Various scripts to check: root containers, dynamic users, writable path variable
 
 ### [check_root_containers.ps1](https://github.com/phishinga/scripts/blob/main/check_root_containers.ps1)
 - Same thing as above in PowerShell and bit enhanced results. 
-- This script checks if any Kubernetes containers are running as the root user by executing the id and busybox id commands on each container to retrieve its UID, and then checking if the UID is 0 (which indicates that the container is running as root).
+- This script checks if any Kubernetes containers are running as the root user by executing the ```id``` and ```busybox id``` commands on each container to retrieve its UID, and then checking if the UID is 0 (which indicates that the container is running as root).
 - For each container running as root, the script outputs a report containing the namespace, pod name, container name, and the command outputs.
 - ```./check_root_containers.ps1```
