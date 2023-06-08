@@ -24,10 +24,14 @@ $projectsResponse.value | ForEach-Object {
         $lastRun = $runsResponse.value | Sort-Object startTime -Descending | Select-Object -First 1
 
         # Check if the last run was more than 12 months ago
-        $lastRunDate = [DateTime]::Parse($lastRun.startTime)
-        $oneYearAgo = (Get-Date).AddMonths(-12)
-        if ($lastRunDate -lt $oneYearAgo) {
-            Write-Output ("Project: {0}, Pipeline ID: {1}, Name: {2}, Created On: {3}, Revision: {4}, Type: {5}, Last Run: {6}, Last Run By: {7}" -f $project, $_.id, $_.name, $_.createdDate, $_.revision, $_.type, $lastRun.startTime, $lastRun.requestedBy.displayName)
+        try {
+            $lastRunDate = [DateTime]::Parse($lastRun.startTime)
+            $oneYearAgo = (Get-Date).AddMonths(-12)
+            if ($lastRunDate -lt $oneYearAgo) {
+                Write-Output ("Project: {0}, Pipeline ID: {1}, Name: {2}, Created On: {3}, Revision: {4}, Type: {5}, Last Run: {6}, Last Run By: {7}" -f $project, $_.id, $_.name, $_.createdDate, $_.revision, $_.type, $lastRun.startTime, $lastRun.requestedBy.displayName)
+            }
+        } catch {
+            Write-Output ("Error parsing date for run ID: {0} in pipeline ID: {1}, Name: {2} in project: {3}" -f $lastRun.id, $_.id, $_.name, $project)
         }
     }
 }
