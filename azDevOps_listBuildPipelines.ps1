@@ -11,12 +11,12 @@ $headers = @{Authorization=("Basic {0}" -f $base64AuthInfo)}
 $pipelinesUrl = "https://dev.azure.com/$organization/$project/_apis/build/definitions?api-version=6.0"
 $pipelinesResponse = Invoke-RestMethod -Uri $pipelinesUrl -Headers $headers -Method Get
 $pipelinesResponse.value | ForEach-Object {
-    Write-Output ("Pipeline ID: {0}, Name: {1}, Created On: {2}, Revision: {3}, Type: {4}" -f $_.id, $_.name, $_.createdDate, $_.revision, $_.type)
-
     # Get a list of runs for each pipeline
     $runsUrl = "https://dev.azure.com/$organization/$project/_apis/build/builds?definitions=$($_.id)&api-version=6.0"
     $runsResponse = Invoke-RestMethod -Uri $runsUrl -Headers $headers -Method Get
-    $runsResponse.value | ForEach-Object {
-        Write-Output ("    Run ID: {0}, Status: {1}, Result: {2}, Start Time: {3}, Finish Time: {4}, Requested By: {5}" -f $_.id, $_.status, $_.result, $_.startTime, $_.finishTime, $_.requestedBy.displayName)
-    }
+
+    # Get the most recent run
+    $lastRun = $runsResponse.value | Sort-Object startTime -Descending | Select-Object -First 1
+
+    Write-Output ("Pipeline ID: {0}, Name: {1}, Created On: {2}, Revision: {3}, Type: {4}, Last Run: {5}, Last Run By: {6}" -f $_.id, $_.name, $_.createdDate, $_.revision, $_.type, $lastRun.startTime, $lastRun.requestedBy.displayName)
 }
