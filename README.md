@@ -34,3 +34,8 @@ Various scripts to check: root containers, dynamic users, writable path variable
 - For each pipeline for all of your Azure DevOps Projects, it fetches the ID, name, creation date, revision, and type. 
 - It also retrieves the most recent run of each pipeline, including the start time and the name of the person who initiated the run. 
 - ```./azDevOps_listBuildPipelines.ps1```
+
+### [azDevOps_listObsoleteBuildPipelines.ps1](https://github.com/phishinga/scripts/blob/main/azDevOps_listObsoleteBuildPipelines.ps1)
+- Same as above but this time it prints the pipeline details omly if the last run was more than 12 months ago. 
+- Great for auditing :)
+- ```./azDevOps_listObsoleteBuildPipelines.ps1```
