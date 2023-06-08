@@ -33,3 +33,4 @@ Various scripts to check: root containers, dynamic users, writable path variable
 - This PowerShell script interacts with the Azure DevOps REST API to retrieve information about your build pipelines. 
 - For each pipeline in your specified project, it fetches the ID, name, creation date, revision, and type. 
 - It also retrieves the most recent run of each pipeline, including the start time and the name of the person who initiated the run. This information is then printed to the console for easy viewing and analysis.
+- - ```./azDevOps_listBuildPipelines.ps1```
