@@ -28,3 +28,8 @@ Various scripts to check: root containers, dynamic users, writable path variable
 - This script checks if any Kubernetes containers are running as the root user by executing the ```id``` and ```busybox id``` commands on each container to retrieve its UID, and then checking if the UID is 0 (which indicates that the container is running as root).
 - For each container running as root, the script outputs a report containing the namespace, pod name, container name, and the command outputs.
 - ```./check_root_containers.ps1```
+
+### [azDevOps_listBuildPipelines.ps1](https://github.com/phishinga/scripts/blob/main/azDevOps_listBuildPipelines.ps1)
+- This PowerShell script interacts with the Azure DevOps REST API to retrieve information about your build pipelines. 
+- For each pipeline in your specified project, it fetches the ID, name, creation date, revision, and type. 
+- It also retrieves the most recent run of each pipeline, including the start time and the name of the person who initiated the run. This information is then printed to the console for easy viewing and analysis.
