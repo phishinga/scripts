@@ -4,6 +4,18 @@
 Run this command to get a list of all projects in your organization:
 
 ```
+# Get a list of all projects
+
+# Set your personal access token and organization
+$personalAccessToken = "XXX-XXX-XXX-XXX"
+$organization = "XXX-XXX-XXX-XXX"
+$project = "APIPlatform"
+
+# Create the authorization header
+$base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($personalAccessToken)"))
+$headers = @{Authorization=("Basic {0}" -f $base64AuthInfo)}
+
+# Lets call someone
 $projectsUrl = "https://dev.azure.com/$organization/_apis/projects?api-version=6.0"
 $projectsResponse = Invoke-RestMethod -Uri $projectsUrl -Headers $headers -Method Get
 $projectsResponse.value | ForEach-Object { Write-Output ("Project: {0}" -f $_.name) }
