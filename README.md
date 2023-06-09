@@ -33,6 +33,13 @@ Various scripts to check: root containers, dynamic users, writable path variable
 - Same as above but this time it prints the pipeline details omly if the last run was more than 12 months ago. 
 - ```./azDevOps_listObsoleteBuildPipelines.ps1```
 
+### [azDevOps_listBuildPipelines.yaml](https://github.com/phishinga/scripts/blob/main/azDevOps_listBuildPipelines.yaml)
+- Example Pipeline for azDevOps pipelines auditing purposes (uses two ps1 files stored in the same repo, Azure PAT and produces txt artifacts)
+- References: 
+  - https://github.com/phishinga/scripts/blob/main/azDevOps_listBuildPipelines4YAML.ps1
+  - https://github.com/phishinga/scripts/blob/main/azDevOps_listObsoleteBuildPipelines4YAML.ps1
+- ```./azDevOps_listObsoleteBuildPipelines.ps1``
+
 ### [check_api_endpoints.sh](https://github.com/phishinga/scripts/blob/main/check_api_endpoints.sh)
 - Simple script for API enumeration testing based on provided txt file.
 - This Bash script reads a list of API endpoints from a file and, for each endpoint, makes HTTP requests using various methods and outputs the responses. The responses are printed to the console with the corresponding HTTP method and URL.
