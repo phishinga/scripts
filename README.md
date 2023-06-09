@@ -2,12 +2,6 @@
 
 Various scripts to check: root containers, dynamic users, writable path variables, cronn access, url status and others. 
 
-### [check_api_endpoints.sh](https://github.com/phishinga/scripts/blob/main/check_api_endpoints.sh)
-- Simple script for API enumeration testing based on provided txt file.
-- This Bash script reads a list of API endpoints from a file and, for each endpoint, makes HTTP requests using various methods and outputs the responses. The responses are printed to the console with the corresponding HTTP method and URL.
-- If you are running this via curl, you will need to make sure that ```api_endpoints.txt``` file is present in the directory where you're running the script.
-- ```curl https://raw.githubusercontent.com/phishinga/scripts/main/check_api_endpoints.sh | bash```
-
 ### [check_cron_access.sh](https://github.com/phishinga/scripts/blob/main/check_cron_access.sh)
 - Script that checks write permissions for all cron-related files and directories for the current user. 
 - When a script executed by Cron is editable by unprivileged users, those unprivileged users can escalate their privilege by editing this script, and waiting for it to be executed by Cron under root privileges.
@@ -38,3 +32,9 @@ Various scripts to check: root containers, dynamic users, writable path variable
 ### [azDevOps_listObsoleteBuildPipelines.ps1](https://github.com/phishinga/scripts/blob/main/azDevOps_listOboleteBuildPipelines.ps1)
 - Same as above but this time it prints the pipeline details omly if the last run was more than 12 months ago. 
 - ```./azDevOps_listObsoleteBuildPipelines.ps1```
+
+### [check_api_endpoints.sh](https://github.com/phishinga/scripts/blob/main/check_api_endpoints.sh)
+- Simple script for API enumeration testing based on provided txt file.
+- This Bash script reads a list of API endpoints from a file and, for each endpoint, makes HTTP requests using various methods and outputs the responses. The responses are printed to the console with the corresponding HTTP method and URL.
+- If you are running this via curl, you will need to make sure that ```api_endpoints.txt``` file is present in the directory where you're running the script.
+- ```curl https://raw.githubusercontent.com/phishinga/scripts/main/check_api_endpoints.sh | bash```
