@@ -23,6 +23,9 @@ Various scripts to check: root containers, dynamic users, writable path variable
 - For each container running as root, the script outputs a report containing the namespace, pod name, container name, and the command outputs.
 - ```./check_root_containers.ps1```
 
+### [azDevOps_troubleshooting.md](https://github.com/phishinga/scripts/blob/main/azDevOps_troubleshooting.md)
+- Simple scripts for troubleshoting azDevOps scripts.
+
 ### [azDevOps_listBuildPipelines.ps1](https://github.com/phishinga/scripts/blob/main/azDevOps_listBuildPipelines.ps1)
 - This PowerShell script interacts with the Azure DevOps REST API to retrieve information about your build pipelines. 
 - For each pipeline for all of your Azure DevOps Projects, it fetches the ID, name, creation date, revision, and type. 
