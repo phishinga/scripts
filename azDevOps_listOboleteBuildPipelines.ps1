@@ -35,3 +35,31 @@ $projectsResponse.value | ForEach-Object {
         }
     }
 }
+
+#OUTPUT TO A SINGLE FILE:
+#Create a new output file at the beginning of your script.
+#Add these lines at the top of your script, right after the param block:
+
+# Create a new output file
+# =============================
+#$outputFile = "output.txt"
+#New-Item -Path $outputFile -ItemType File -Force
+# =============================
+
+#This creates a new file named output.txt in the same directory as your script. If a file with the same name already exists, it will be overwritten.
+
+#Change Write-Output to Add-Content.
+
+#Find the Write-Output line in your script:
+# =============================
+#Write-Output ("Project: {0}, Pipeline ID: {1}, Name: {2}, Created On: {3}, Revision: {4}, Type: {5}, Last Run: {6}, Last Run By: {7}" -f $project, $_.id, $_.name, $_.createdDate, $_.revision, $_.type, $lastRun.startTime, $lastRun.requestedBy.displayName)
+# =============================
+
+#And replace it with Add-Content:
+# =============================
+#$output = "Project: {0}, Pipeline ID: {1}, Name: {2}, Created On: {3}, Revision: {4}, Type: {5}, Last Run: {6}, Last Run By: {7}" -f $project, $_.id, $_.name, $_.createdDate, $_.revision, $_.type, $lastRun.startTime, $lastRun.requestedBy.displayName
+#Add-Content -Path $outputFile -Value $output
+# =============================
+
+#This appends the output to the file specified by $outputFile instead of printing it to the console.
+
