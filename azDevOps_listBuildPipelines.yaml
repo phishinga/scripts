@@ -1,0 +1,57 @@
+# Example Pipeline for azDevOps pipelines auditing purposes (uses two ps1 files stored in the same repo and Azure PAT)
+
+variables:
+- name: ProjectName&TeamName
+  value: ExampleProject.TeamName
+- name: AZURE_SUBSCRIPTION
+  value: 'ExampleAzureSubscription'
+
+name: 0.1.$(Rev:r) $(ProjectName&TeamName)
+
+pool: XXX-XXX-XXX-XXX
+
+trigger: none
+
+steps:
+
+- task: PowerShell@2
+  name: listBuildPipelines
+  displayName: "listBuildPipelines"
+  inputs:
+    filePath: 'scripts/listBuildPipelines.ps1'
+    arguments: '-personalAccessToken "$(PAT)"'
+    errorActionPreference: 'continue'
+    warningPreference: 'continue'
+    informationPreference: 'continue'
+    verbosePreference: 'continue'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+- task: PowerShell@2
+  name: listObsoleteBuildPipelines
+  displayName: "listObsoleteBuildPipelines"
+  inputs:
+    filePath: 'scripts/listObsoleteBuildPipelines.ps1'
+    arguments: '-personalAccessToken "$(PAT)"'
+    errorActionPreference: 'continue'
+    warningPreference: 'continue'
+    informationPreference: 'continue'
+    verbosePreference: 'continue'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: "Publish Time"
+  inputs:
+    PathtoPublish: $(System.DefaultWorkingDirectory)/export
+    ArtifactName: "listBuildPipelines"
+    publishLocation: "Container"
+
+#
+# In order for arguments: "'-personalAccessToken "$(PAT)""" to work properly, add to the ps1 script following:
+# =======================================================
+#
+#   # Accepts command-line argument which shuld be PAT:
+#
+#   param(
+#       [string]$personalAccessToken
+#   )
+#
