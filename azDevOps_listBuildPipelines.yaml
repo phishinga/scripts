@@ -18,7 +18,7 @@ steps:
   name: listBuildPipelines
   displayName: "listBuildPipelines"
   inputs:
-    filePath: 'scripts/listBuildPipelines.ps1'
+    filePath: 'scripts/azDevOps_listBuildPipelines4YAML.ps1'
     arguments: '-personalAccessToken "$(PAT)"'
     errorActionPreference: 'continue'
     warningPreference: 'continue'
@@ -30,7 +30,7 @@ steps:
   name: listObsoleteBuildPipelines
   displayName: "listObsoleteBuildPipelines"
   inputs:
-    filePath: 'scripts/listObsoleteBuildPipelines.ps1'
+    filePath: 'scripts/azDevOps_listObsoleteBuildPipelines4YAML.ps1'
     arguments: '-personalAccessToken "$(PAT)"'
     errorActionPreference: 'continue'
     warningPreference: 'continue'
