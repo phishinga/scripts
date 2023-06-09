@@ -38,7 +38,6 @@ Various scripts to check: root containers, dynamic users, writable path variable
 - References: 
   - https://github.com/phishinga/scripts/blob/main/azDevOps_listBuildPipelines4YAML.ps1
   - https://github.com/phishinga/scripts/blob/main/azDevOps_listObsoleteBuildPipelines4YAML.ps1
-- ```./azDevOps_listObsoleteBuildPipelines.ps1``
 
 ### [check_api_endpoints.sh](https://github.com/phishinga/scripts/blob/main/check_api_endpoints.sh)
 - Simple script for API enumeration testing based on provided txt file.
