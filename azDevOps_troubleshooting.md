@@ -49,10 +49,22 @@ $teamsResponse.value | ForEach-Object { Write-Output ("Team: {0}" -f $_.name) }
 Replace "YOUR_TEAM" with the name or ID of your team:
 
 ```
-$team = "YOUR_TEAM"
+# Get a list of team members for a specific team
+
+# Set your personal access token and organization
+$personalAccessToken = "XXX-XXX-XXX-XXX"
+$organization = "XXX-XXX-XXX-XXX"
+$project = "XXX-XXX-XXX-XXX"
+$team = "XXX-XXX-XXX-XXX"
+
+# Create the authorization header
+$base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($personalAccessToken)"))
+$headers = @{Authorization=("Basic {0}" -f $base64AuthInfo)}
+
+# Lets call someone
 $membersUrl = "https://dev.azure.com/$organization/_apis/projects/$project/teams/$team/members?api-version=6.0"
 $membersResponse = Invoke-RestMethod -Uri $membersUrl -Headers $headers -Method Get
-$membersResponse.value | ForEach-Object { Write-Output ("Member: {0}" -f $_.displayName) }
+$membersResponse.value | ForEach-Object { Write-Output ("Member: {0}" -f $_.identity.displayName) }
 ```
 
 ## Get build pipelines for a project
