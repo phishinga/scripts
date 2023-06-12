@@ -37,7 +37,6 @@ $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$(
 $headers = @{Authorization=("Basic {0}" -f $base64AuthInfo)}
 
 # Lets call someone
-$project = "YOUR_PROJECT"
 #$teamsUrl = "https://dev.azure.com/$organization/$project/_apis/teams?api-version=6.0"
 #$teamsUrl = "https://dev.azure.com/HQY01/APIPlatform/_settings/teams?"
 $teamsUrl = "https://dev.azure.com/$organization/_apis/teams?api-version=6.0-preview"
