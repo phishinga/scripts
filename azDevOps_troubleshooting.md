@@ -9,7 +9,7 @@ Run this command to get a list of all projects in your organization:
 # Set your personal access token and organization
 $personalAccessToken = "XXX-XXX-XXX-XXX"
 $organization = "XXX-XXX-XXX-XXX"
-$project = "APIPlatform"
+$project = "XXX-XXX-XXX-XXX"
 
 # Create the authorization header
 $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($personalAccessToken)"))
@@ -25,8 +25,22 @@ $projectsResponse.value | ForEach-Object { Write-Output ("Project: {0}" -f $_.na
 Replace "YOUR_PROJECT" with the name or ID of your project:
 
 ```
+# Get a list of teams for a specific project
+
+# Set your personal access token and organization
+$personalAccessToken = "XXX-XXX-XXX-XXX"
+$organization = "XXX-XXX-XXX-XXX"
+$project = "XXX-XXX-XXX-XXX"
+
+# Create the authorization header
+$base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($personalAccessToken)"))
+$headers = @{Authorization=("Basic {0}" -f $base64AuthInfo)}
+
+# Lets call someone
 $project = "YOUR_PROJECT"
-$teamsUrl = "https://dev.azure.com/$organization/$project/_apis/teams?api-version=6.0"
+#$teamsUrl = "https://dev.azure.com/$organization/$project/_apis/teams?api-version=6.0"
+#$teamsUrl = "https://dev.azure.com/HQY01/APIPlatform/_settings/teams?"
+$teamsUrl = "https://dev.azure.com/$organization/_apis/teams?api-version=6.0-preview"
 $teamsResponse = Invoke-RestMethod -Uri $teamsUrl -Headers $headers -Method Get
 $teamsResponse.value | ForEach-Object { Write-Output ("Team: {0}" -f $_.name) }
 ```
