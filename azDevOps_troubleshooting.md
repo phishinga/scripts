@@ -105,32 +105,65 @@ $personalAccessToken = "XXX-XXX-XXX-XXX"
 $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($personalAccessToken)"))
 $headers = @{Authorization=("Basic {0}" -f $base64AuthInfo)}
 
-function Get-Yaml($Url) {
-    # Get the YAML content from the URL
-    $response = Invoke-RestMethod -Uri $Url -Headers $headers
-
-    # Parse the YAML content
-    $yaml = ConvertFrom-Yaml $response
-
-    return $yaml
-}
-
 function Trace-Pipeline($Url) {
     $pipeline = Get-Yaml $Url
 
-    if ($pipeline.stages) {
-        foreach ($stage in $pipeline.stages) {
-            if ($stage.template) {
-                $templateUrl = "https://dev.azure.com/{organization}/{project}/_git/{repo}?path=$($stage.template)&version=GB{branch}"
+    # Check the 'extends' section for a template reference
+    if ($pipeline.extends.template -and $pipeline.resources.repositories) {
+        foreach ($repo in $pipeline.resources.repositories) {
+            if ($repo.repository -eq $pipeline.extends.template.Split("@")[1]) {
+                $templatePath = $pipeline.extends.template.Split("@")[0]
+                $branch = $repo.ref
+                $projectName = $repo.name.Split("/")[0]
+                $repoName = $repo.name.Split("/")[1]
+
+                $templateUrl = "https://dev.azure.com/{organization}/$projectName/_apis/sourceProviders/TfsGit/filecontents?repository=$repoName&path=/$templatePath&commitOrBranch=$branch&api-version=5.0-preview.1"
                 Write-Output "$Url >> $templateUrl"
                 Trace-Pipeline $templateUrl
             }
         }
     }
+
+    # Check the 'stages' section for template references
+    if ($pipeline.stages) {
+        foreach ($stage in $pipeline.stages) {
+            if ($stage.template -and $pipeline.resources.repositories) {
+                foreach ($repo in $pipeline.resources.repositories) {
+                    if ($repo.repository -eq $stage.template.Split("@")[1]) {
+                        $templatePath = $stage.template.Split("@")[0]
+                        $branch = $repo.ref
+                        $projectName = $repo.name.Split("/")[0]
+                        $repoName = $repo.name.Split("/")[1]
+
+                        $templateUrl = "https://dev.azure.com/{organization}/$projectName/_apis/sourceProviders/TfsGit/filecontents?repository=$repoName&path=/$templatePath&commitOrBranch=$branch&api-version=5.0-preview.1"
+                        Write-Output "$Url >> $templateUrl"
+                        Trace-Pipeline $templateUrl
+                    }
+                }
+            }
+        }
+    }
+
+    # Check the 'jobs' section for template references
+    if ($pipeline.jobs) {
+        foreach ($job in $pipeline.jobs) {
+            if ($job.template -and $pipeline.resources.repositories) {
+                foreach ($repo in $pipeline.resources.repositories) {
+                    if ($repo.repository -eq $job.template.Split("@")[1]) {
+                        $templatePath = $job.template.Split("@")[0]
+                        $branch = $repo.ref
+                        $projectName = $repo.name.Split("/")[0]
+                        $repoName = $repo.name.Split("/")[1]
+
+                        $templateUrl = "https://dev.azure.com/{organization}/$projectName/_apis/sourceProviders/TfsGit/filecontents?repository=$repoName&path=/$templatePath&commitOrBranch=$branch&api-version=5.0-preview.1"
+                        Write-Output "$Url >> $templateUrl"
+                        Trace-Pipeline $templateUrl
+                    }
+                }
+            }
+        }
+    }
 }
 
-# Start tracing from your main pipeline file
-$mainPipelineUrl = "https://dev.azure.com/{organization}/{project}/_git/{repo}?path={path_to_main_pipeline}&version=GB{branch}"
-Trace-Pipeline $mainPipelineUrl
 
 ```
