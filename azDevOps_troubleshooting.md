@@ -100,6 +100,7 @@ Import-Module powershell-yaml
 
 # Your Personal Access Token (PAT)
 $personalAccessToken = "XXX-XXX-XXX-XXX"
+$organization = "XXX-XXX-XXX-XXX"
 
 # Create the authorization header
 $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($personalAccessToken)"))
