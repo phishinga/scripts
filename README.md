@@ -25,12 +25,14 @@ Various scripts to check: root containers, dynamic users, writable path variable
 
 ### [azDevOps_troubleshooting.md](https://github.com/phishinga/scripts/blob/main/azDevOps_troubleshooting.md)
 - Simple scripts for troubleshoting azDevOps scripts.
+- Display raw content of file in Azure DevOps
 - Get a list of all projects
 - Get a list of teams for a specific project
 - Get a list of team members for a specific team
 - Get build pipelines for a project
 - Get repositories per project
 - Find all templates and references within yaml pipeline
+
 
 ### [azDevOps_listBuildPipelines.ps1](https://github.com/phishinga/scripts/blob/main/azDevOps_listBuildPipelines.ps1)
 - This PowerShell script interacts with the Azure DevOps REST API to retrieve information about your build pipelines. 
