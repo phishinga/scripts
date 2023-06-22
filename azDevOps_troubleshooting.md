@@ -84,3 +84,45 @@ $reposResponse = Invoke-RestMethod -Uri $reposUrl -Headers $headers -Method Get
 $reposResponse.value | ForEach-Object { Write-Output $_.name }
 ```
 
+## Find all templates and references within yaml pipeline
+
+```
+# Import the required module
+Import-Module powershell-yaml
+
+# Your Personal Access Token (PAT)
+$personalAccessToken = "XXX-XXX-XXX-XXX"
+
+# Create the authorization header
+$base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($personalAccessToken)"))
+$headers = @{Authorization=("Basic {0}" -f $base64AuthInfo)}
+
+function Get-Yaml($Url) {
+    # Get the YAML content from the URL
+    $response = Invoke-RestMethod -Uri $Url -Headers $headers
+
+    # Parse the YAML content
+    $yaml = ConvertFrom-Yaml $response
+
+    return $yaml
+}
+
+function Trace-Pipeline($Url) {
+    $pipeline = Get-Yaml $Url
+
+    if ($pipeline.stages) {
+        foreach ($stage in $pipeline.stages) {
+            if ($stage.template) {
+                $templateUrl = "https://dev.azure.com/{organization}/{project}/_git/{repo}?path=$($stage.template)&version=GB{branch}"
+                Write-Output "$Url >> $templateUrl"
+                Trace-Pipeline $templateUrl
+            }
+        }
+    }
+}
+
+# Start tracing from your main pipeline file
+$mainPipelineUrl = "https://dev.azure.com/{organization}/{project}/_git/{repo}?path={path_to_main_pipeline}&version=GB{branch}"
+Trace-Pipeline $mainPipelineUrl
+
+```
