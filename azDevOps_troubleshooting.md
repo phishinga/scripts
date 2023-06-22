@@ -165,5 +165,9 @@ function Trace-Pipeline($Url) {
     }
 }
 
+# Start tracing from your main pipeline file
+$mainPipelineUrl = "[https://dev.azure.com/HQY01/APIPlatform/_apis/sourceProviders/TfsGit/filecontents?repository=ApiPortalApp&path=/pipelines/dev/build.yaml&commitOrBranch=develop&api-version=5.0-preview.1](https://dev.azure.com/{ORG}/{PROJECT}/_apis/sourceProviders/TfsGit/filecontents?repository={REPONAME}&path=/{FOLDER/SUBFOLDER/build.yaml}&commitOrBranch={BRANCH}&api-version=5.0-preview.1)https://dev.azure.com/{ORG}/{PROJECT}/_apis/sourceProviders/TfsGit/filecontents?repository={REPONAME}&path=/{FOLDER/SUBFOLDER/build.yaml}&commitOrBranch={BRANCH}&api-version=5.0-preview.1"
+Trace-Pipeline $mainPipelineUrl
+
 
 ```
