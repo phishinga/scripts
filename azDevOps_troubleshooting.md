@@ -85,6 +85,7 @@ $reposResponse.value | ForEach-Object { Write-Output $_.name }
 ```
 
 ## Find all templates and references within yaml pipeline
+PowerShell script that reads a YAML file from an Azure DevOps repository, traces the template references, and prints out the dependencies. This script uses the powershell-yaml module to parse YAML and a Personal Access Token (PAT) to authenticate with Azure DevOps
 
 ```
 # Import the required module
