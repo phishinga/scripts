@@ -1,5 +1,12 @@
 # Troubleshooting azDevOps scripts
 
+## Display raw content of file in Azure DevOps
+Taken from here: https://stackoverflow.com/questions/54137998/is-it-possible-to-have-a-link-to-raw-content-of-file-in-azure-devops
+
+```
+https://dev.azure.com/{ORG}/{PROJECT}/_apis/sourceProviders/TfsGit/filecontents?repository={REPONAME}&path=/{FOLDER/SUBFOLDER/build.yaml}&commitOrBranch={BRANCH}&api-version=5.0-preview.1
+```
+
 ## Get a list of all projects
 Run this command to get a list of all projects in your organization:
 
