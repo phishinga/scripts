@@ -38,6 +38,18 @@ steps:
     verbosePreference: 'continue'
     workingDirectory: '$(System.DefaultWorkingDirectory)'
 
+- task: PowerShell@2
+  name: listDisabledBuildPipelines
+  displayName: "listDisabledBuildPipelines"
+  inputs:
+    filePath: 'scripts/listDisabledBuildPipelines.ps1'
+    arguments: '-personalAccessToken "$(System.AccessToken)"'
+    errorActionPreference: 'continue'
+    warningPreference: 'continue'
+    informationPreference: 'continue'
+    verbosePreference: 'continue'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+
 - task: PublishBuildArtifacts@1
   displayName: "Publish Time"
   inputs:
