@@ -4,13 +4,13 @@
 Taken from here: https://stackoverflow.com/questions/54137998/is-it-possible-to-have-a-link-to-raw-content-of-file-in-azure-devops
 
 ```
-https://dev.azure.com/{ORG}/{PROJECT}/_apis/sourceProviders/TfsGit/filecontents?repository={REPONAME}&path=/{FOLDER/SUBFOLDER/build.yaml}&commitOrBranch={BRANCH}&api-version=5.0-preview.1
+https://dev.azure.com/{ORG}/{PROJECT}/_apis/sourceProviders/TfsGit/filecontents?repository={REPONAME}&path=/{FOLDER/SUBFOLDER/build.yaml}&commitOrBranch={BRANCHNAME}&api-version=5.0-preview.1
 ```
 
 ## List pipelines per project per repo via az CLI
 
 ```
-az pipelines list --organization https://dev.azure.com/YOURORG --project YOURPOJECT --repository YOURREPO --output table
+az pipelines list --organization https://dev.azure.com/ORGNAME --project PROJECTNAME --repository REPONAME --output table
 ```
 
 ## Get a list of all projects
