@@ -1,4 +1,4 @@
-# Troubleshooting azDevOps scripts
+# Troubleshooting azDevOps scripts (via PowerShell)
 
 ## Display raw content of file in Azure DevOps
 Taken from here: https://stackoverflow.com/questions/54137998/is-it-possible-to-have-a-link-to-raw-content-of-file-in-azure-devops
