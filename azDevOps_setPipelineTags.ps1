@@ -25,3 +25,10 @@ $requestBody = @{
 # Print it out baby
 $projectsResponse
 
+
+
+
+Invoke-RestMethod : {"$id":"1","innerException":null,"message":"The request indicated a Content-Type of \"application/x-www-form-urlencoded\" for 
+method type \"POST\" which is not supported. Valid content types for this method are: application/json, 
+application/json-patch+json.","typeName":"Microsoft.VisualStudio.Services.WebApi.VssRequestContentTypeNotSupportedException, 
+Microsoft.VisualStudio.Services.WebApi","typeKey":"VssRequestContentTypeNotSupportedException","errorCode":0,"eventId":3000}
