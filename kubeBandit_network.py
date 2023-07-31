@@ -1,0 +1,51 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+
+# Parse the YAML file
+with open('networkpolicy.yaml', 'r') as file:
+    k8s_data = yaml.safe_load(file)
+
+# Extract the relevant information
+name = k8s_data['metadata']['name']
+pod_selector_labels = k8s_data['spec']['podSelector']['matchLabels']
+ingress_rules = k8s_data['spec'].get('ingress', [])
+egress_rules = k8s_data['spec'].get('egress', [])
+
+# Create a directed graph
+G = nx.DiGraph()
+
+# Add a node for the NetworkPolicy
+G.add_node(name)
+
+# Add a node for the pods selected by the NetworkPolicy
+pod_selector_node = f"Pods: {pod_selector_labels}"
+G.add_node(pod_selector_node)
+
+# Add an edge from the NetworkPolicy to the selected pods
+G.add_edge(name, pod_selector_node)
+
+# Add nodes and edges for the ingress rules
+for rule in ingress_rules:
+    for source in rule['from']:
+        for key, value in source['podSelector']['matchLabels'].items():
+            # Add a node for the source pod
+            source_node = f"{key}: {value}"
+            G.add_node(source_node)
+            
+            # Add an edge from the source pod to the selected pods
+            G.add_edge(source_node, pod_selector_node)
+
+# Add nodes and edges for the egress rules
+for rule in egress_rules:
+    for destination in rule['to']:
+        for key, value in destination['podSelector']['matchLabels'].items():
+            # Add a node for the destination pod
+            destination_node = f"{key}: {value}"
+            G.add_node(destination_node)
+            
+            # Add an edge from the selected pods to the destination pod
+            G.add_edge(pod_selector_node, destination_node)
+
+# Draw the graph
+nx.draw(G, with_labels=True)
+plt.show()
