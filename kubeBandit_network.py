@@ -3,7 +3,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 # Parse the YAML file
-with open('memberaccountaggregationbefe-api-allow-ingress.yaml', 'r') as file:
+with open('networkingpolicy.yaml', 'r') as file:
     k8s_data = yaml.safe_load(file)
 
 # Extract the relevant information
