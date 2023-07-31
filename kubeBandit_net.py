@@ -3,9 +3,10 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import os
 import fnmatch
+import re
 
 # Get a list of all files in the directory
-directory_path = '/path/to/your/directory'  # Replace with the path to your directory
+directory_path = 'yamls'  # Replace with the path to your directory
 all_files = os.listdir(directory_path)
 
 # Filter for YAML files
@@ -13,9 +14,19 @@ yaml_files = [file for file in all_files if fnmatch.fnmatch(file, '*.yaml')]
 
 # Process each YAML file
 for yaml_file in yaml_files:
-    # Parse the YAML file
+    # Read the file
     with open(os.path.join(directory_path, yaml_file), 'r') as file:
-        k8s_data = yaml.safe_load(file)
+        file_content = file.read()
+
+    # Remove or replace unacceptable characters
+    file_content = file_content.replace('\x00', '')
+
+    # Parse the YAML content
+    try:
+        k8s_data = yaml.safe_load(file_content)
+    except yaml.YAMLError as e:
+        print(f"Error parsing file {yaml_file}: {e}")
+        continue
 
     # Extract the relevant information
     release_name = k8s_data['metadata']['annotations']['meta.helm.sh/release-name']
