@@ -7,8 +7,9 @@ with open('memberaccountaggregationbefe-api-allow-ingress.yaml', 'r') as file:
     k8s_data = yaml.safe_load(file)
 
 # Extract the relevant information
-name = k8s_data['metadata']['name']
-pod_selector_labels = k8s_data['spec']['podSelector']['matchLabels']
+release_name = k8s_data['metadata']['annotations']['meta.helm.sh/release-name']
+release_namespace = k8s_data['metadata']['annotations']['meta.helm.sh/release-namespace']
+network_policy = k8s_data['spec']['podSelector']['matchLabels']
 ingress_rules = k8s_data['spec'].get('ingress', [])
 egress_rules = k8s_data['spec'].get('egress', [])
 
@@ -16,14 +17,7 @@ egress_rules = k8s_data['spec'].get('egress', [])
 G = nx.DiGraph()
 
 # Add a node for the NetworkPolicy
-G.add_node(name)
-
-# Add a node for the pods selected by the NetworkPolicy
-pod_selector_node = f"Pods: {pod_selector_labels}"
-G.add_node(pod_selector_node)
-
-# Add an edge from the NetworkPolicy to the selected pods
-G.add_edge(name, pod_selector_node)
+G.add_node(release_name)
 
 # Add nodes and edges for the ingress rules
 for rule in ingress_rules:
@@ -34,7 +28,7 @@ for rule in ingress_rules:
             G.add_node(source_node)
             
             # Add an edge from the source pod to the selected pods
-            G.add_edge(source_node, pod_selector_node)
+            G.add_edge(source_node, release_name)
 
 # Add nodes and edges for the egress rules
 for rule in egress_rules:
@@ -45,8 +39,20 @@ for rule in egress_rules:
             G.add_node(destination_node)
             
             # Add an edge from the selected pods to the destination pod
-            G.add_edge(pod_selector_node, destination_node)
+            G.add_edge(release_name, destination_node)
 
-# Draw the graph
-nx.draw(G, with_labels=True)
+
+# Draw the graph 
+pos = nx.spring_layout(G, k=0.2, seed=12)
+
+labels = {node: f"{node}\n{network_policy}" for node in G.nodes()}
+nx.draw(G, pos, labels=labels)
+
+ax = plt.gca()
+xlim = ax.get_xlim()
+ylim = ax.get_ylim()
+padding = 0.3
+ax.set_xlim(xlim[0] - padding, xlim[1] + padding)
+ax.set_ylim(ylim[0] - padding, ylim[1] + padding)
+
 plt.show()
