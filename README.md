@@ -1,5 +1,10 @@
 # Banch of scripts
 
+==========================================================================================
+NOTE: THIS REFERS TO OLD FOLDER STRUCTURE, THUS LINKS DO NOT WORK AND NEED TO BE UPDATED
+==========================================================================================
+
+
 Various scripts to check: root containers, dynamic users, writable path variables, cronn access, url status and others. 
 
 ### [check_cron_access.sh](https://github.com/phishinga/scripts/blob/main/check_cron_access.sh)
