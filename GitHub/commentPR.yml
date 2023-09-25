@@ -1,0 +1,81 @@
+# This will comment PR in various ways.
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  comment:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Comment 1 - 👋 Thanks for reporting! :wave: :earth_americas: :octocat: :tada: :1st_place_medal:'
+            })   
+
+  comment2:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it.
+      - uses: actions/checkout@v3
+
+      # Runs a set of commands using the runners shell   ..  https://api.github.com/emojis     
+      - name: comment PR
+        uses: thollander/actions-comment-pull-request@v2.4.2
+        with:
+          message: |
+            Comment 2 - Hello world ! :wave: :earth_americas: :octocat: :tada: :1st_place_medal:
+            
+  comment3:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it...
+      - uses: actions/checkout@v3
+
+      # Runs a set of commands using the runners shell   ..       
+      - name: comment PR
+        uses: unsplash/comment-on-pr@v1.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          msg: "Comment 3 - Check out this message! :wave: :earth_americas: :octocat: :tada: :1st_place_medal:"
+          check_for_duplicate_msg: false  # OPTIONAL
+          delete_prev_regex_msg: "[0-9]"  # OPTIONAL
+          duplicate_msg_pattern: "[A-Z]"  # OPTIONAL
+
+  update_pull_request_body:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Update Pull Request body
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const newMessage = 'New message to add to the PR body.\n\n' +
+                               ':wave: :earth_americas: :octocat: :tada: :1st_place_medal:"'  +
+                               ':wave: :earth_americas: :octocat: :tada: :1st_place_medal:"'  ;
+            github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              body: context.payload.pull_request.body + '\n\n' + newMessage
+            });
